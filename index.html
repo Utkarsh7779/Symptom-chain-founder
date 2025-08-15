@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Symptom Diagnosis Predictor</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    input, button { padding: 8px; margin: 8px 0; width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Symptom Chain Diagnosis Predictor</h1>
+  <form id="symptomForm">
+    <label>Enter symptoms (comma separated):</label>
+    <input type="text" id="symptomsInput" placeholder="e.g., fever, cough" />
+    <button type="submit">Predict Diagnosis</button>
+  </form>
+
+  <h2 id="result"></h2>
+
+  <script>
+    const form = document.getElementById('symptomForm');
+    const resultEl = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const symptomsRaw = document.getElementById('symptomsInput').value;
+      const symptoms = symptomsRaw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+
+      const res = await fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symptoms })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        resultEl.innerText = `🧠 Predicted Diagnosis: ${data.predictedDiagnosis} (matched ${data.matches} case${data.matches > 1 ? 's' : ''})`;
+      } else {
+        resultEl.innerText = `❌ ${data.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

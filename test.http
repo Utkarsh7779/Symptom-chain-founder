@@ -1,0 +1,25 @@
+POST http://localhost:3000/patients
+###
+GET http://localhost:3000/patients
+###
+GET http://localhost:3000/patterns
+
+
+Content-Type: application/json
+
+{
+  "name": "Utkarsh",
+  "symptoms": [
+    { "name": "headache", "date": "2024-07-01" },
+    { "name": "vomiting", "date": "2024-07-02" },
+    { "name": "blurred vision", "date": "2024-07-03" }
+  ],
+  "diagnosis": "migraine"
+}
+###
+POST http://localhost:3000/predict
+Content-Type: application/json
+
+{
+  "symptoms": ["headache", "vomiting"]
+}
